@@ -6,7 +6,7 @@ const config: Config = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: { '^@/(.*)$': '<rootDir>/src/$1' },
   transform: {
-    '^.+\\.tsx?$': ['ts-jest', { useESM: true, tsconfig: { jsx: 'react' } }],
+    '^.+\\.tsx?$': ['ts-jest', { useESM: true, tsconfig: { jsx: 'react-jsx' } }],
     '^.+\\.js$': ['ts-jest', { useESM: true }],
   },
   transformIgnorePatterns: ['node_modules/(?!(nanoid)/)'],
