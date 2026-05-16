@@ -33,6 +33,18 @@ export async function POST(
 
   const supabase = createServerClient()
 
+  // Check for existing votes from this session on this poll
+  const { data: existingVotes } = await supabase
+    .from('votes')
+    .select('id')
+    .eq('poll_id', id)
+    .eq('session_token', session_token!)
+    .limit(1)
+
+  if (existingVotes && existingVotes.length > 0) {
+    return NextResponse.json({ error: 'Already voted' }, { status: 409 })
+  }
+
   const voteRows = slot_ids.map((slot_id) => ({
     poll_id: id,
     slot_id,

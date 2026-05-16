@@ -8,18 +8,29 @@ const mockUpdate = jest.fn()
 const mockEqUpdate = jest.fn().mockResolvedValue({ error: null })
 mockUpdate.mockReturnValue({ eq: mockEqUpdate })
 
-const mockSingle = jest.fn().mockResolvedValue({
+const mockPollSingle = jest.fn().mockResolvedValue({
   data: { id: 'poll-123', organizer_token: 'valid-token' },
   error: null,
 })
-const mockEqSelect = jest.fn().mockReturnValue({ single: mockSingle })
-const mockSelect = jest.fn().mockReturnValue({ eq: mockEqSelect })
+const mockPollEqSelect = jest.fn().mockReturnValue({ single: mockPollSingle })
+const mockPollSelect = jest.fn().mockReturnValue({ eq: mockPollEqSelect })
+
+const mockSlotSingle = jest.fn().mockResolvedValue({
+  data: { id: 's1' },
+  error: null,
+})
+const mockSlotEqPollId = jest.fn().mockReturnValue({ single: mockSlotSingle })
+const mockSlotEqId = jest.fn().mockReturnValue({ eq: mockSlotEqPollId })
+const mockSlotSelect = jest.fn().mockReturnValue({ eq: mockSlotEqId })
 
 jest.mock('@/lib/supabase/server', () => ({
   createServerClient: () => ({
     from: jest.fn((table: string) => {
       if (table === 'polls') {
-        return { select: mockSelect, update: mockUpdate }
+        return { select: mockPollSelect, update: mockUpdate }
+      }
+      if (table === 'slots') {
+        return { select: mockSlotSelect }
       }
       return {}
     }),

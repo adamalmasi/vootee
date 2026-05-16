@@ -34,7 +34,9 @@ export async function POST(req: NextRequest) {
   const { error: slotError } = await supabase.from('slots').insert(slotRows)
 
   if (slotError) {
-    return NextResponse.json({ error: 'slot insert error' }, { status: 500 })
+    // Compensating delete — clean up orphaned poll
+    await supabase.from('polls').delete().eq('id', poll.id)
+    return NextResponse.json({ error: 'Failed to create slots' }, { status: 500 })
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'

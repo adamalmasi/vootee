@@ -10,6 +10,7 @@ const config: Config = {
     '^.+\\.js$': ['ts-jest', { useESM: true }],
   },
   transformIgnorePatterns: ['node_modules/(?!(nanoid)/)'],
+  testPathIgnorePatterns: ['/node_modules/', '/.claude/worktrees/'],
 }
 
 export default config

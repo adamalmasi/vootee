@@ -10,7 +10,7 @@ export async function GET(
 
   const { data, error } = await supabase
     .from('polls')
-    .select('*, slots(*)')
+    .select('id, title, closed_slot_id, created_at, slots(id, poll_id, starts_at, ends_at, vote_count)')
     .eq('id', id)
     .single()
 

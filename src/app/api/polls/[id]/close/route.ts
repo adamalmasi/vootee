@@ -28,6 +28,17 @@ export async function PATCH(
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   }
 
+  const { data: slot, error: slotError } = await supabase
+    .from('slots')
+    .select('id')
+    .eq('id', slot_id)
+    .eq('poll_id', id)
+    .single()
+
+  if (slotError || !slot) {
+    return NextResponse.json({ error: 'Invalid slot' }, { status: 400 })
+  }
+
   const { error } = await supabase
     .from('polls')
     .update({ closed_slot_id: slot_id })
