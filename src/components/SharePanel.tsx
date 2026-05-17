@@ -6,13 +6,21 @@ type Props = { voteLink: string; adminLink: string }
 export default function SharePanel({ voteLink, adminLink }: Props) {
   const [copied, setCopied] = useState(false)
 
+  function withUtm(source: string) {
+    const url = new URL(voteLink)
+    url.searchParams.set('utm_source', source)
+    url.searchParams.set('utm_medium', 'share')
+    url.searchParams.set('utm_campaign', 'poll_invite')
+    return url.toString()
+  }
+
   function copyLink() {
-    navigator.clipboard.writeText(voteLink)
+    navigator.clipboard.writeText(withUtm('copy'))
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const waText = encodeURIComponent(`Szavazz az időpontra: ${voteLink}`)
+  const waText = encodeURIComponent(`Szavazz az időpontra: ${withUtm('whatsapp')}`)
 
   return (
     <div className="space-y-5">
@@ -30,7 +38,7 @@ export default function SharePanel({ voteLink, adminLink }: Props) {
           className="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold text-center py-2.5 rounded-lg">
           WhatsApp
         </a>
-        <a href={`mailto:?subject=Időpont-szavazás&body=${waText}`}
+        <a href={`mailto:?subject=Időpont-szavazás&body=${encodeURIComponent(`Szavazz az időpontra: ${withUtm('email')}`)}`}
           className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-semibold text-center py-2.5 rounded-lg">
           Email
         </a>
