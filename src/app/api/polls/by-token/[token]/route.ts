@@ -9,7 +9,7 @@ export async function GET(
   const supabase = createServerClient()
   const { data, error } = await supabase
     .from('polls')
-    .select('*, slots(*)')
+    .select('*, slots!poll_id(*)')
     .eq('organizer_token', token)
     .single()
 

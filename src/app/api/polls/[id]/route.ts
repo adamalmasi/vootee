@@ -10,12 +10,12 @@ export async function GET(
 
   const { data, error } = await supabase
     .from('polls')
-    .select('id, title, closed_slot_id, created_at, slots(id, poll_id, starts_at, ends_at, vote_count)')
+    .select('id, title, closed_slot_id, created_at, slots!poll_id(id, poll_id, starts_at, ends_at, vote_count)')
     .eq('id', id)
     .single()
 
   if (error || !data) {
-    return NextResponse.json({ error: 'not found', detail: error?.message ?? null }, { status: 404 })
+    return NextResponse.json({ error: 'not found' }, { status: 404 })
   }
 
   return NextResponse.json(data)
