@@ -15,7 +15,7 @@ export async function GET(
     .single()
 
   if (error || !data) {
-    return NextResponse.json({ error: 'not found' }, { status: 404 })
+    return NextResponse.json({ error: 'not found', detail: error?.message ?? null }, { status: 404 })
   }
 
   return NextResponse.json(data)
