@@ -13,6 +13,7 @@ export default function CreatePage() {
   const [slotMap, setSlotMap] = useState<SlotMap>({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [honeypot, setHoneypot] = useState('')
 
   function toggleDay(day: string) {
     if (selectedDays.includes(day)) {
@@ -48,7 +49,7 @@ export default function CreatePage() {
     const res = await fetch('/api/polls', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, slots }),
+      body: JSON.stringify({ title, slots, website: honeypot }),
     })
     setLoading(false)
 
@@ -82,6 +83,15 @@ export default function CreatePage() {
         </div>
       )}
       {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+      <input
+        type="text"
+        value={honeypot}
+        onChange={e => setHoneypot(e.target.value)}
+        autoComplete="off"
+        tabIndex={-1}
+        aria-hidden="true"
+        style={{ display: 'none' }}
+      />
       <button onClick={handleSubmit} disabled={loading}
         className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2.5 rounded-lg transition disabled:opacity-50">
         {loading ? 'Létrehozás...' : 'Link generálása →'}

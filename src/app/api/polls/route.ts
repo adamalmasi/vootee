@@ -4,7 +4,11 @@ import { generateOrganizerToken } from '@/lib/token'
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { title, slots } = body as { title?: string; slots?: string[] }
+  const { title, slots, website } = body as { title?: string; slots?: string[]; website?: string }
+
+  if (website) {
+    return NextResponse.json({ error: 'bad request' }, { status: 400 })
+  }
 
   if (!title?.trim()) {
     return NextResponse.json({ error: 'title required' }, { status: 400 })
